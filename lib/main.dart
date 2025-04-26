@@ -1,16 +1,25 @@
 import 'package:digitalshop/screens/home_screen.dart';
 import 'package:digitalshop/screens/login_screen.dart';
 import 'package:digitalshop/screens/register_screen.dart';
-import 'package:digitalshop/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'controllers/product_controller.dart';
+import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Don't forget
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyB0VsdJWZjMBv6_kqzaOrgqoOg4RjD8MVw", // <-- YOURS
+      authDomain: "digitalshop-485ad.firebaseapp.com",
+      projectId: "digitalshop-485ad",
+      storageBucket: "digitalshop-485ad.firebasestorage.app",
+      messagingSenderId: "468275975090",
+      appId: "1:468275975090:web:8d9280f2f0d9d60da14aab",
+    ),
+  );
   Get.put(AuthService());
   Get.put(ProductController());
 
