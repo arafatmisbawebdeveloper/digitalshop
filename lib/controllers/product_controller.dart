@@ -4,50 +4,55 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ProductController extends GetxController {
-  var isLoading = true.obs;
-  var productList = [].obs;
-  var categoryList = [].obs;
+  var isLoading = false.obs;
+  var categories = [].obs;
+  var products = [].obs;
+  var cart = [].obs;
 
   @override
   void onInit() {
-    super.onInit();
     fetchCategories();
-    fetchAllProducts();
+    super.onInit();
   }
 
-  Future<void> fetchCategories() async {
-    try {
-      isLoading(true);
-      var response = await http
-          .get(Uri.parse('https://fakestoreapi.com/products/categories'));
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        categoryList.assignAll(data);
-      } else {
-        Get.snackbar('Error', 'Failed to fetch categories');
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading(false);
+  void fetchCategories() async {
+    isLoading(true);
+    var response = await http
+        .get(Uri.parse('https://fakestoreapi.com/products/categories'));
+    if (response.statusCode == 200) {
+      categories.value = jsonDecode(response.body);
     }
+    isLoading(false);
   }
 
-  Future<void> fetchAllProducts() async {
-    try {
-      isLoading(true);
-      var response =
-          await http.get(Uri.parse('https://fakestoreapi.com/products'));
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        productList.assignAll(data);
-      } else {
-        Get.snackbar('Error', 'Failed to fetch products');
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading(false);
+  void fetchProductsByCategory(String category) async {
+    isLoading(true);
+    var response = await http
+        .get(Uri.parse('https://fakestoreapi.com/products/category/$category'));
+    if (response.statusCode == 200) {
+      products.value = jsonDecode(response.body);
     }
+    isLoading(false);
+  }
+
+  void fetchAllProducts() async {
+    isLoading(true);
+    var response =
+        await http.get(Uri.parse('https://fakestoreapi.com/products'));
+    if (response.statusCode == 200) {
+      products.value = jsonDecode(response.body);
+    }
+    isLoading(false);
+  }
+
+  void fetchCart() async {
+    isLoading(true);
+    var response =
+        await http.get(Uri.parse('https://fakestoreapi.com/carts/1'));
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      cart.value = data['products'];
+    }
+    isLoading(false);
   }
 }

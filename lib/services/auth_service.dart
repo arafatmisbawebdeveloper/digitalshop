@@ -1,9 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import '../screens/home_screen.dart';
-import '../screens/login_screen.dart';
-
 class AuthService extends GetxController {
   static AuthService instance = Get.find();
   late Rx<User?> _user;
@@ -19,28 +16,26 @@ class AuthService extends GetxController {
 
   _initialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => LoginScreen());
+      Get.offAllNamed('/login');
     } else {
-      Get.offAll(() => HomePage());
+      Get.offAllNamed('/home');
     }
   }
 
-  void register(String email, password) async {
+  void register(String email, String password) async {
     try {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
     } catch (e) {
-      Get.snackbar('Registration Error', e.toString(),
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Registration Error', e.toString());
     }
   }
 
-  void login(String email, password) async {
+  void login(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
-      Get.snackbar('Login Error', e.toString(),
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('Login Error', e.toString());
     }
   }
 

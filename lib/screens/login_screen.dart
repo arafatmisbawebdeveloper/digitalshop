@@ -1,60 +1,41 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+import '../services/auth_service.dart';
+
+class LoginPage extends StatelessWidget {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
-    void loginUser() async {
-      try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
-        Get.offAllNamed('/home'); // Navigate to Home after successful login
-      } on FirebaseAuthException catch (e) {
-        Get.snackbar('Login Failed', e.message ?? 'Something went wrong');
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
+                controller: emailController,
+                decoration: const InputDecoration(labelText: 'Email')),
             TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 24),
+                controller: passwordController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true),
+            const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: loginUser,
+              onPressed: () {
+                AuthService.instance.login(emailController.text.trim(),
+                    passwordController.text.trim());
+              },
               child: const Text('Login'),
             ),
             TextButton(
               onPressed: () {
                 Get.toNamed('/register');
               },
-              child: const Text('Don\'t have an account? Register'),
+              child: const Text('No account? Register here.'),
             )
           ],
         ),

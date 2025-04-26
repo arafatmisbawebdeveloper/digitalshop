@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
-class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
+class NotificationPage extends StatelessWidget {
+  const NotificationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Notifications')),
-      body: const Center(
-        child: Text('No Notifications yet!'),
-      ),
+    return const Scaffold(
+      body: Center(child: Text('No Notifications')),
     );
   }
 }

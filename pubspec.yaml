@@ -30,10 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^1.20.0
-  firebase_auth: ^3.5.0
-  firebase_auth_web: 4.6.1
-  cloud_firestore: ^3.1.18
+  firebase_core: ^2.30.0
+  firebase_auth: ^4.19.0
+  firebase_auth_web: 5.12.0
+  cloud_firestore: ^4.17.0
   get: ^4.6.5
   http: ^0.13.4
 
