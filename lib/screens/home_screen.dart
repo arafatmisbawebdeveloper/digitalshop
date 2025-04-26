@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
         child: ListView(
           children: [
             ListTile(
+                 leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () => Get.find<AuthService>().logout(),
             ),

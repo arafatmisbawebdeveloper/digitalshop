@@ -1,3 +1,5 @@
+import 'package:digitalshop/screens/all_products_screen.dart';
+import 'package:digitalshop/screens/cart_screen.dart';
 import 'package:digitalshop/screens/home_screen.dart';
 import 'package:digitalshop/screens/login_screen.dart';
 import 'package:digitalshop/screens/register_screen.dart';
@@ -39,6 +41,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => LoginPage()),
         GetPage(name: '/register', page: () => RegisterPage()),
         GetPage(name: '/home', page: () => HomePage()),
+        GetPage(
+            name: '/all-products', page: () => AllProductsPage(category: '')),
+        GetPage(name: '/cart', page: () => CartPage()),
       ],
     );
   }

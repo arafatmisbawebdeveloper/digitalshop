@@ -11,7 +11,7 @@ class ProductDetailPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.network(product['image'], height: 150),
             const SizedBox(height: 20),
