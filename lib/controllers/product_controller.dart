@@ -4,55 +4,107 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class ProductController extends GetxController {
-  var isLoading = false.obs;
-  var categories = [].obs;
-  var products = [].obs;
-  var cart = [].obs;
+  // Observable Lists
+  var products = <Map<String, dynamic>>[].obs;
+  var categories = <String>[].obs;
+  var cart = <Map<String, dynamic>>[].obs;
+
+  // Loading status
+  var isLoadingCategories = true.obs;
+  var isLoadingProducts = true.obs;
 
   @override
   void onInit() {
-    fetchCategories();
     super.onInit();
+    fetchCategories();
+    fetchProducts();
   }
 
+  // Fetch all categories
   void fetchCategories() async {
-    isLoading(true);
-    var response = await http
-        .get(Uri.parse('https://fakestoreapi.com/products/categories'));
-    if (response.statusCode == 200) {
-      categories.value = jsonDecode(response.body);
+    try {
+      isLoadingCategories(true);
+      var response = await http
+          .get(Uri.parse('https://fakestoreapi.com/products/categories'));
+      if (response.statusCode == 200) {
+        categories.value = List<String>.from(json.decode(response.body));
+      }
+    } catch (e) {
+      print('Error fetching categories: $e');
+    } finally {
+      isLoadingCategories(false);
     }
-    isLoading(false);
   }
 
-  void fetchProductsByCategory(String category) async {
-    isLoading(true);
-    var response = await http
-        .get(Uri.parse('https://fakestoreapi.com/products/category/$category'));
-    if (response.statusCode == 200) {
-      products.value = jsonDecode(response.body);
+  // Fetch all products
+  void fetchProducts() async {
+    try {
+      isLoadingProducts(true);
+      var response =
+          await http.get(Uri.parse('https://fakestoreapi.com/products'));
+      if (response.statusCode == 200) {
+        products.value =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+      }
+    } catch (e) {
+      print('Error fetching products: $e');
+    } finally {
+      isLoadingProducts(false);
     }
-    isLoading(false);
   }
 
-  void fetchAllProducts() async {
-    isLoading(true);
-    var response =
-        await http.get(Uri.parse('https://fakestoreapi.com/products'));
-    if (response.statusCode == 200) {
-      products.value = jsonDecode(response.body);
+  // Fetch products by category
+  void getProductsByCategory(String category) async {
+    try {
+      isLoadingProducts(true);
+      var response = await http.get(
+          Uri.parse('https://fakestoreapi.com/products/category/$category'));
+      if (response.statusCode == 200) {
+        products.value =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+      }
+    } catch (e) {
+      print('Error fetching products by category: $e');
+    } finally {
+      isLoadingProducts(false);
     }
-    isLoading(false);
   }
 
-  void fetchCart() async {
-    isLoading(true);
-    var response =
-        await http.get(Uri.parse('https://fakestoreapi.com/carts/1'));
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      cart.value = data['products'];
+  // Add product to cart
+  void addToCart(Map<String, dynamic> product) {
+    if (!cart.contains(product)) {
+      cart.add(product);
+      Get.snackbar(
+        'Cart',
+        'Product added successfully!',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } else {
+      Get.snackbar(
+        'Cart',
+        'Product already in cart!',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
-    isLoading(false);
+  }
+
+  // Remove product from cart
+  void removeFromCart(Map<String, dynamic> product) {
+    cart.remove(product);
+    Get.snackbar(
+      'Cart',
+      'Product removed!',
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+
+  // Clear the entire cart
+  void clearCart() {
+    cart.clear();
+    Get.snackbar(
+      'Cart',
+      'Cart cleared!',
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 }
